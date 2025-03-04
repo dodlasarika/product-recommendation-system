@@ -17,11 +17,23 @@ similarity_matrix = cosine_similarity(product_vectors)
 def recommend_products(product_name):
     if product_name not in df['Product_Name'].values:
         return ["Product not found! Please enter a valid product name."]
-
+    
+    # Find the index of the given product
     idx = df[df['Product_Name'] == product_name].index[0]
+
+    # Compute similarity scores for the given product
     similarity_scores = list(enumerate(similarity_matrix[idx]))
-    sorted_products = sorted(similarity_scores, key=lambda x: x[1], reverse=True)[1:4]
+
+    # Sort products based on similarity scores (excluding the first one, which is itself)
+    sorted_products = sorted(similarity_scores, key=lambda x: x[1], reverse=True)[1:6]  # Getting top 5 similar products
+
+    # Get the recommended product names
     recommendations = [df.iloc[i[0]]['Product_Name'] for i in sorted_products]
+
+    # Debugging: Print similarity scores to check if sorting works correctly
+    print(f"\nProduct: {product_name}")
+    print("Recommendations:", recommendations)
+
     return recommendations
 
 # Streamlit UI
